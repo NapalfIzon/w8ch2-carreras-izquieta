@@ -1,5 +1,5 @@
 const Tuit = require("../../database/models/tuit");
-const { getAllTuits, addTuit } = require("./tuitContollers");
+const { getAllTuits, addTuit, getTuitById } = require("./tuitContollers");
 
 jest.mock("../../database/models/tuit");
 
@@ -87,6 +87,56 @@ describe("Given a addTuit function", () => {
         "message",
         "Cannot add the tuit."
       );
+    });
+  });
+});
+
+describe("Given a getTuitById function", () => {
+  describe("When it receives a req with an id, res and tuit exists", () => {
+    test("Then it should respond with the tuit in the res.json", async () => {
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      };
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const tuit = {
+        title: "tuit1",
+      };
+      Tuit.findById = jest.fn().mockResolvedValue(tuit);
+
+      await getTuitById(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(tuit);
+    });
+  });
+  describe("When it receives a req with an id and there are NO tuits matching id", () => {
+    test("Then it should invoke next with the error 404 and message", async () => {
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const next = jest.fn();
+      const res = null;
+      Tuit.findById = jest.fn().mockResolvedValue(null);
+      const error = new Error("Searched tuit not found");
+      error.code = 404;
+
+      await getTuitById(req, res, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+    });
+  });
+  describe("When it's invoked and findById returns error", () => {
+    test("Then it should invoke next with the error 400 and message", async () => {
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const next = jest.fn();
+      const res = null;
+      Tuit.findById = jest.fn().mockRejectedValue(new Error());
+      const error = new Error("Cannot search the tuit");
+      error.code = 400;
+
+      await getTuitById(req, res, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
     });
   });
 });
