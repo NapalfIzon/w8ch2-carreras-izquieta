@@ -11,6 +11,6 @@ const router = express.Router();
 router.get("/", getAllTuits);
 router.get("/:idTuit", getTuitById);
 router.post("/", addTuit);
-router.patch("/", addLike);
+router.patch("/:idTuit", addLike);
 
 module.exports = router;
