@@ -3,6 +3,7 @@ const chalk = require("chalk");
 const morgan = require("morgan");
 const cors = require("cors");
 const debug = require("debug")("tuitah:serverIndex");
+const tuitRoutes = require("./routes/tuitRoutes");
 
 const app = express();
 app.disable("x-powered-by");
@@ -42,5 +43,7 @@ const initializeServer = (port) =>
 app.use(chalk.cyanBright(morgan("dev")));
 app.use(cors());
 app.use(express.json());
+
+app.use("/tuit", tuitRoutes);
 
 module.exports = initializeServer;
