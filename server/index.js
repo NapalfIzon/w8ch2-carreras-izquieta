@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const debug = require("debug")("tuitah:serverIndex");
 const tuitRoutes = require("./routes/tuitRoutes");
+const { notFoundHandler, finalErrorHandler } = require("./middlewares/error");
 
 const app = express();
 app.disable("x-powered-by");
@@ -40,10 +41,12 @@ const initializeServer = (port) =>
     });
   });
 
-app.use(chalk.cyanBright(morgan("dev")));
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
 app.use("/tuit", tuitRoutes);
+app.use(notFoundHandler);
+app.use(finalErrorHandler);
 
 module.exports = initializeServer;
