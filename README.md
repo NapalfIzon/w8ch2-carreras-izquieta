@@ -12,4 +12,4 @@ Los tuits se deben poder borrar.
 
 Si se hace clic en un tuit, debe llevar a una página de detalle (con SSG).
 
-La API debe atacar a esta base de datos: mongodb+srv://isdicoudah:BHK0ZxbKMjTQUEJp@cluster0.4n6eq.mongodb.net/tuitah.
+La API debe atacar a esta base de datos *oculta*.
