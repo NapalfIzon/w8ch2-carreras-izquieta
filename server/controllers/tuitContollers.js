@@ -1,4 +1,3 @@
-const debug = require("debug")("tuitah:serverControllers");
 const Tuit = require("../../database/models/tuit");
 
 const getAllTuits = async (req, res, next) => {
@@ -33,7 +32,7 @@ const getTuitById = async (req, res, next) => {
 const addTuit = async (req, res, next) => {
   try {
     const tuit = await Tuit.create(req.body);
-    res.json(tuit);
+    res.status(201).json(tuit);
   } catch (error) {
     error.code = 400;
     error.message = "Cannot add the tuit.";
@@ -61,9 +60,28 @@ const addLike = async (req, res, next) => {
   }
 };
 
+const deleteTuitById = async (req, res, next) => {
+  const { idTuit } = req.params;
+  try {
+    const deletedTuit = await Tuit.findByIdAndDelete(idTuit);
+    if (deletedTuit) {
+      res.json(deletedTuit);
+    } else {
+      const error = new Error("Tuit to delete not found");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "Cannot delete the tuit";
+    next(error);
+  }
+};
+
 module.exports = {
   getAllTuits,
   getTuitById,
   addTuit,
   addLike,
+  deleteTuitById,
 };
