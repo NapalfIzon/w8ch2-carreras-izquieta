@@ -1,5 +1,10 @@
 const Tuit = require("../../database/models/tuit");
-const { getAllTuits, addTuit, getTuitById } = require("./tuitContollers");
+const {
+  getAllTuits,
+  addTuit,
+  getTuitById,
+  deleteTuitById,
+} = require("./tuitContollers");
 
 jest.mock("../../database/models/tuit");
 
@@ -134,6 +139,56 @@ describe("Given a getTuitById function", () => {
       error.code = 400;
 
       await getTuitById(req, res, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+    });
+  });
+});
+
+describe("Given a deleteTuitById function", () => {
+  describe("When it receives a req with an id, res and tuit exists", () => {
+    test("Then it should respond with the deleted tuit in the res.json", async () => {
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      };
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const tuit = {
+        title: "tuit1",
+      };
+      Tuit.findByIdAndDelete = jest.fn().mockResolvedValue(tuit);
+
+      await deleteTuitById(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(tuit);
+    });
+  });
+  describe("When it receives a req with an id and there are NO tuits matching id", () => {
+    test("Then it should invoke next with the error 404 and message", async () => {
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const next = jest.fn();
+      const res = null;
+      Tuit.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      const error = new Error("Tuit to delete not found");
+      error.code = 404;
+
+      await deleteTuitById(req, res, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+    });
+  });
+  describe("When it's invoked and findByIdAndDelete returns error", () => {
+    test("Then it should invoke next with the error 400 and message", async () => {
+      const req = { params: { idTuit: "6185993022dd92661d3cfca6" } };
+      const next = jest.fn();
+      const res = null;
+      Tuit.findByIdAndDelete = jest.fn().mockRejectedValue(new Error());
+      const error = new Error("Cannot delete the tuit");
+      error.code = 400;
+
+      await deleteTuitById(req, res, next);
 
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
       expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
