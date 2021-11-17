@@ -1,0 +1,45 @@
+{
+  "name": "challenge2",
+  "version": "1.0.0",
+  "description": "# Tuitah Next.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index -q",
+    "start": "node index",
+    "test": "jest --watchAll",
+    "test-coverage": "jest --collect-coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NapalfIzon/w8ch2-carreras-izquieta.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NapalfIzon/w8ch2-carreras-izquieta/issues"
+  },
+  "homepage": "https://github.com/NapalfIzon/w8ch2-carreras-izquieta#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "debug": "^4.3.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validation": "^3.0.8",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13",
+    "morgan": "^1.10.0"
+  }
+}
